@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom"
+import './styles.css'
 
 function Home() {
     return (
-        <>Minha Home
+        <>
+            <h2>Página inicial</h2>
 
-            <Link to={'/rick-and-morty'}>
+            <Link to={'/users'}>
                 <button>
                     Navegar para API
                 </button>

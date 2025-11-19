@@ -1,17 +1,28 @@
 
 import { useEffect, useState } from 'react'
-import { getUsers } from '../api/users'
+import { deleteUser, getUsers } from '../api/users'
 import { Link } from 'react-router-dom'
-
+import { toast } from 'react-toastify'
+import './styles.css'
 
 
 
 
 function Users() {
 
-    const [conteudo, setConteudo] = useState(<>Carregando</>)
+    const [conteudo, setConteudo] = useState(<>Carregando...</>)
+   
 
+    const handleDelete = async (id) => {
+       const response = await deleteUser(id)
 
+        if(response.status !== 204) {
+            toast("Erro ao deletar, tente nomavente, mais tarde")
+            return
+        }
+
+        window.location.reload()
+    }
 
     async function TranformaEmLista() {
         const todosUsuarios = await getUsers()
@@ -21,8 +32,8 @@ function Users() {
                 <label>{ user.nome }</label>
                 <label>{ user.email }</label>
                 <div className='actions'>
-                    <button>Alterar</button>
-                    <button>Deleta</button>
+                    <button onClick={() => handleUpdate(user)}>Alterar</button>
+                    <button type='button' onClick={() => handleDelete(user.id)}>Deleta</button>
                 </div>
             </div>
         )
