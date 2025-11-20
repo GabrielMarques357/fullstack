@@ -6,11 +6,7 @@ function Home() {
         <>
             <h2>Página inicial</h2>
 
-            <Link to={'/users'}>
-                <button>
-                    Navegar para API
-                </button>
-            </Link>
+            
 
         </>
     )

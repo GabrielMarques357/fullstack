@@ -1,66 +1,58 @@
 import ServiceUser from '../service/users.js'
 
 class ControllerUser {
-
+    
     async FindAll(_, res) {
         try {
-
             const users = await ServiceUser.FindAll()
-
             res.status(200).send({ users })
-
         } catch (error) {
             res.status(500).send({ error: error.message })
         }
     }
-
+    
     async FindOne(req, res) {
         try {
-            console.log(req.headers.user)
-            const id = req.params.id
-            console.log(id)
+            const id = req.params.id || req.headers?.user?.id
 
             const user = await ServiceUser.FindOne(id)
-
-            res.status(200).send({user})
-
+            res.status(200).send({ user })
         } catch (error) {
             res.status(500).send({ error: error.message })
         }
     }
 
-     async Create(req, res) {
+    async Create(req, res) {
         try {
-            const {nome, email, senha, ativo} = req.body
-             await ServiceUser.Create(nome, email, senha, ativo, 1)
-
+            const loggedUser = req.headers?.user
+            let permissao = 1
+            if(loggedUser && loggedUser.permissao === 0){
+                permissao = req.body.permissao
+            }
+            const { nome, email, senha, ativo } = req.body
+            await ServiceUser.Create(nome, email, senha, ativo, permissao)
             res.status(201).send()
-
         } catch (error) {
             res.status(500).send({ error: error.message })
         }
     }
-
+    
     Update(req, res) {
         try {
-            const id = req.params.id
-            const {nome, email, senha, ativo} = req.body
-            ServiceUser.Update(id, nome, email, senha, ativo)
-
+            const id = req.params.id || req.headers?.user?.id
+            const nome = req.body.nome
+            ServiceUser.Update(id, nome)
             res.status(200).send()
-
         } catch (error) {
             res.status(500).send({ error: error.message })
         }
     }
-
-    Delete(req, res) {
+    
+    async Delete(req, res) {
         try {
-            const id = req.params.id
-            ServiceUser.Delete(id)
-
+            const id = req.params.id || req.headers?.user?.id
+            await ServiceUser.Delete(id)
             res.status(204).send()
-
         } catch (error) {
             res.status(500).send({ error: error.message })
         }
@@ -69,7 +61,7 @@ class ControllerUser {
     async Login(req, res) {
         try {
             const { email, senha } = req.body
-            
+
             const token = await ServiceUser.Login(email, senha)
 
             res.status(200).send({ token })
@@ -77,6 +69,6 @@ class ControllerUser {
             res.status(500).send({ error: error.message })
         }
     }
-}
 
+}
 export default new ControllerUser()
