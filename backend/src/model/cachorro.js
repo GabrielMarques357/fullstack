@@ -1,26 +1,25 @@
-const nomes = new Array("Buldogue", "Pug", "Rottweiler")
+import database from "../config/databse.js"
 
-class ModelCachorro {
-
-    FindAll() {
-        return nomes
+class User {
+    constructor() {
+        this.model = database.db.define('petshop', {
+            id: {
+                type: database.db.Sequelize.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            nome: {
+                type: database.db.Sequelize.STRING
+            },
+            raca: {
+                type: database.db.Sequelize.STRING
+            },
+            permissao: {
+                type: database.db.Sequelize.INTEGER
+            }
+        })
     }
-
-    FindOne(index) {
-        return nomes[index]
-    }
-
-    Create(nome) {
-        nomes.push(nome)
-    }
-
-    Update(index, nome) {
-        nomes[index] = nome
-    }
-
-    Delete(index) {
-        nomes.splice(index, 1)
-    }
+   
 }
 
-export default new ModelCachorro()
+export default new User().model

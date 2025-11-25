@@ -3,19 +3,17 @@ import api from "./api"
 export const getUsers = async () => {
     const response = await api.get('/api/v1/users')
 
-    if(response.status !== 200) {
-        return []
+    if(response.status !== 200){
+        return [] // throw new Error('')
     }
 
-    console.log(response)
-
     return response.data.users
-} 
+}
 
 export const createUser = async (user) => {
-    const response = await api.post('/api/v1/user', user)
+   const response = await api.post('/api/v1/user', user)
 
-    return response
+   return response
 }
 
 export const updateUser = async (id, user) => {
@@ -24,7 +22,6 @@ export const updateUser = async (id, user) => {
     return response
 }
 
-
 export const deleteUser = async (id) => {
     const response = await api.delete(`/api/v1/user/${id}`)
 
@@ -32,7 +29,8 @@ export const deleteUser = async (id) => {
 }
 
 export const loginUser = async (email, senha) => {
-    const response = await api.post('/api/v1/login', { email, senha })
+    const response = await api
+        .post('/api/v1/login', { email, senha })
 
-    return response
+   return response
 }
